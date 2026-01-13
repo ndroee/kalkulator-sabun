@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Kalkulator Sabun Pro V2</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        padding-bottom: 80px;
+      }
+      .card-result {
+        background: #e3f2fd;
+        border: none;
+      }
+      .prop-box {
+        font-size: 0.8rem;
+        text-align: center;
+      }
+      .prop-val {
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+      /* Style untuk mode switch */
+      .mode-switch .btn-check:checked + .btn {
+        background-color: #0d6efd;
+        color: white;
+        border-color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-3">
+      <h3 class="text-center mb-4">🧪 Kalkulator Sabun</h3>
+
+      <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+          <div class="row mb-2">
+            <div class="col-12">
+              <label class="form-label fw-bold text-primary" id="targetLabel"
+                >Target Berat Total</label
+              >
+              <div class="input-group">
+                <input
+                  type="number"
+                  id="targetTotal"
+                  class="form-control form-control-lg"
+                  value="1000"
+                  oninput="calculate()"
+                />
+                <span class="input-group-text">gr</span>
+              </div>
+              <small class="text-muted" id="targetHint"
+                >Masukkan total berat adonan</small
+              >
+            </div>
+          </div>
+          <hr />
+          <div class="row">
+            <div class="col-6">
+              <label class="form-label small d-flex align-items-center">
+                Kadar Air (%)
+                <button
+                  type="button"
+                  class="btn btn-sm btn-link text-decoration-none p-0 ms-1"
+                  data-bs-toggle="popover"
+                  data-bs-trigger="focus"
+                  title="Panduan Kadar Air"
+                  data-bs-content="38% = Pemula (Adonan cair lama, mudah dituang). 
+33% = Standar (Paling seimbang). 
+28% = Mahir (Cepat keras, curing lebih cepat)."
+                >
+                  🤔
+                </button>
+              </label>
+              <input
+                type="number"
+                id="waterRatio"
+                class="form-control"
+                value="33"
+                oninput="calculate()"
+              />
+            </div>
+
+            <div class="col-6">
+              <label class="form-label small d-flex align-items-center">
+                Superfat (%)
+                <button
+                  type="button"
+                  class="btn btn-sm btn-link text-decoration-none p-0 ms-1"
+                  data-bs-toggle="popover"
+                  data-bs-trigger="focus"
+                  title="Panduan Superfat"
+                  data-bs-content="0% = Sabun Cuci Baju/Piring (Kesat, daya bersih tinggi). 
+5% = Sabun Mandi (Aman & melembapkan kulit). 
+8-10% = Sabun Bayi/Sensitif (Sangat lembut, busa sedikit)."
+                >
+                  🤔
+                </button>
+              </label>
+              <input
+                type="number"
+                id="superfat"
+                class="form-control"
+                value="5"
+                oninput="calculate()"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+          <div class="row mb-2">
+            <div class="col-12">
+              <label class="form-label fw-bold text-primary" id="targetLabel"
+                >Target Berat Total (Sabun Jadi)</label
+              >
+              <div class="input-group">
+                <input
+                  type="number"
+                  id="targetTotal"
+                  class="form-control form-control-lg"
+                  value="1000"
+                  oninput="calculate()"
+                />
+                <span class="input-group-text">gr</span>
+              </div>
+              <small class="text-muted" id="targetHint"
+                >Masukkan total berat adonan (Minyak + Air + Lye)</small
+              >
+            </div>
+          </div>
+          <hr />
+          <div class="row">
+            <div class="col-6">
+              <label class="form-label small">Kadar Air (%)</label>
+              <input
+                type="number"
+                id="waterRatio"
+                class="form-control"
+                value="33"
+                oninput="calculate()"
+              />
+            </div>
+            <div class="col-6">
+              <label class="form-label small">Superfat (%)</label>
+              <input
+                type="number"
+                id="superfat"
+                class="form-control"
+                value="5"
+                oninput="calculate()"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3 shadow-sm">
+        <div
+          class="card-header bg-white d-flex justify-content-between align-items-center"
+        >
+          <span id="col-header-input">Input (%)</span>
+          <span id="total-badge" class="badge bg-secondary">Total: 0</span>
+          <button class="btn btn-primary btn-sm" onclick="addRow()">
+            + Tambah
+          </button>
+        </div>
+        <div class="card-body" id="oil-container"></div>
+      </div>
+
+      <div class="card card-result shadow-sm mb-3">
+        <div class="card-body">
+          <h5 class="card-title text-center">Resep Final</h5>
+          <hr />
+          <div class="row text-center">
+            <div class="col-4">
+              <small>Total Minyak</small><br />
+              <span id="res-oil" class="h5 fw-bold text-dark">0 gr</span>
+            </div>
+            <div class="col-4">
+              <small>Air</small><br />
+              <span id="res-water" class="h5 text-primary">0 gr</span>
+            </div>
+            <div class="col-4">
+              <small>Soda Api</small><br />
+              <span id="res-lye" class="h5 text-danger">0 gr</span>
+            </div>
+          </div>
+          <div class="text-center mt-2 bg-white rounded p-2 border">
+            <small class="text-muted">Berat Adonan Total</small><br />
+            <span id="res-total" class="h3 text-success">0 gr</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="text-muted small mb-3">Kualitas Sabun (0-100)</h6>
+          <div class="row">
+            <div class="col-3 prop-box">
+              Keras<br /><span id="prop-hard" class="prop-val">0</span>
+            </div>
+            <div class="col-3 prop-box">
+              Bersih<br /><span id="prop-clean" class="prop-val">0</span>
+            </div>
+            <div class="col-3 prop-box">
+              Lembut<br /><span id="prop-cond" class="prop-val">0</span>
+            </div>
+            <div class="col-3 prop-box">
+              Busa<br /><span id="prop-bubb" class="prop-val">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="data_minyak.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      // Inisialisasi Popover (Tooltip yang bisa diklik)
+      document.addEventListener("DOMContentLoaded", function () {
+        var popoverTriggerList = [].slice.call(
+          document.querySelectorAll('[data-bs-toggle="popover"]')
+        );
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+          return new bootstrap.Popover(popoverTriggerEl);
+        });
+      });
+    </script>
+  </body>
+</html>
