@@ -41,78 +41,34 @@
       <h3 class="text-center mb-4">🧪 Kalkulator Sabun</h3>
 
       <div class="card mb-3 shadow-sm">
-        <div class="card-body">
-          <div class="row mb-2">
-            <div class="col-12">
-              <label class="form-label fw-bold text-primary" id="targetLabel"
-                >Target Berat Total</label
-              >
-              <div class="input-group">
-                <input
-                  type="number"
-                  id="targetTotal"
-                  class="form-control form-control-lg"
-                  value="1000"
-                  oninput="calculate()"
-                />
-                <span class="input-group-text">gr</span>
-              </div>
-              <small class="text-muted" id="targetHint"
-                >Masukkan total berat adonan</small
-              >
-            </div>
-          </div>
-          <hr />
-          <div class="row">
-            <div class="col-6">
-              <label class="form-label small d-flex align-items-center">
-                Kadar Air (%)
-                <button
-                  type="button"
-                  class="btn btn-sm btn-link text-decoration-none p-0 ms-1"
-                  data-bs-toggle="popover"
-                  data-bs-trigger="focus"
-                  title="Panduan Kadar Air"
-                  data-bs-content="38% = Pemula (Adonan cair lama, mudah dituang). 
-33% = Standar (Paling seimbang). 
-28% = Mahir (Cepat keras, curing lebih cepat)."
-                >
-                  🤔
-                </button>
-              </label>
-              <input
-                type="number"
-                id="waterRatio"
-                class="form-control"
-                value="33"
-                oninput="calculate()"
-              />
-            </div>
+        <div class="card-body p-2">
+          <div class="btn-group w-100 mode-switch" role="group">
+            <input
+              type="radio"
+              class="btn-check"
+              name="modebtn"
+              id="modePercent"
+              value="percent"
+              autocomplete="off"
+              checked
+              onchange="changeMode()"
+            />
+            <label class="btn btn-outline-primary" for="modePercent"
+              >Mode Persen (%)</label
+            >
 
-            <div class="col-6">
-              <label class="form-label small d-flex align-items-center">
-                Superfat (%)
-                <button
-                  type="button"
-                  class="btn btn-sm btn-link text-decoration-none p-0 ms-1"
-                  data-bs-toggle="popover"
-                  data-bs-trigger="focus"
-                  title="Panduan Superfat"
-                  data-bs-content="0% = Sabun Cuci Baju/Piring (Kesat, daya bersih tinggi). 
-5% = Sabun Mandi (Aman & melembapkan kulit). 
-8-10% = Sabun Bayi/Sensitif (Sangat lembut, busa sedikit)."
-                >
-                  🤔
-                </button>
-              </label>
-              <input
-                type="number"
-                id="superfat"
-                class="form-control"
-                value="5"
-                oninput="calculate()"
-              />
-            </div>
+            <input
+              type="radio"
+              class="btn-check"
+              name="modebtn"
+              id="modeGram"
+              value="gram"
+              autocomplete="off"
+              onchange="changeMode()"
+            />
+            <label class="btn btn-outline-primary" for="modeGram"
+              >Mode Berat (Gr)</label
+            >
           </div>
         </div>
       </div>
@@ -225,18 +181,5 @@
     </div>
 
     <script src="data_minyak.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-      // Inisialisasi Popover (Tooltip yang bisa diklik)
-      document.addEventListener("DOMContentLoaded", function () {
-        var popoverTriggerList = [].slice.call(
-          document.querySelectorAll('[data-bs-toggle="popover"]')
-        );
-        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-          return new bootstrap.Popover(popoverTriggerEl);
-        });
-      });
-    </script>
   </body>
 </html>
